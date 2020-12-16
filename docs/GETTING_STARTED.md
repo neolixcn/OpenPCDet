@@ -100,3 +100,12 @@ sh scripts/slurm_train.sh ${PARTITION} ${JOB_NAME} ${NUM_GPUS} --cfg_file ${CONF
 ```shell script
 python train.py --cfg_file ${CONFIG_FILE}
 ```
+
+
+### Export a pointpillars onnx model
+* Firstly, choose the forward function version for exporting a onnx model in base_bev_backbone.py and anchor_head_single.py, respectively. 
+* Secondly, run the export onnx script
+```shell script
+python export_onnx.py --cfg_file cfgs/neolix_models/pointpillar.yaml --data_path neolix_000004.bin --ckpt pp_checkpoint_epoch_80.pth
+```
+There will be four onnx models generated: vfe.onnx, backbone.onnx, head.onnx and rpn.onnx, and rpn.onnx is merged from backbone.onnx and head.onnx.
