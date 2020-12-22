@@ -68,22 +68,20 @@ def parse_config():
 
     return args, cfg
 
-def export_onnx(model, batch_dict):
-    voxel_features, voxel_num_points, coords = batch_dict['voxels'], batch_dict['voxel_num_points'], batch_dict['voxel_coords']
-
+def export_onnx(model):
     print('-------------- network readable visiual --------------')
     # print(model.module_list[0].pfn_layers[0])
-    vfe_input = torch.ones([12000, 32, 10], dtype=torch.float32, device=voxel_features.device)
+    vfe_input = torch.ones([12000, 32, 10], dtype=torch.float32, device='cuda')
     torch.onnx.export(model.module_list[0].pfn_layers[0], vfe_input, "vfe.onnx", verbose=False, input_names=['features'],
                       output_names=['pillar_features'])
     print('vfe.onnx transfer success ...')
 
-    spatial_features = torch.ones([1, 64, 288, 288], dtype=torch.float32, device=voxel_features.device)
+    spatial_features = torch.ones([1, 64, 288, 288], dtype=torch.float32, device='cuda')
     torch.onnx.export(model.module_list[2], spatial_features, "backbone.onnx", verbose=False,input_names=['spatial_features'],
                       output_names=['spatial_features_2d'])
     print('backbone.onnx transfer success ...')
 
-    spatial_features_2d = torch.ones([1, 384, 144, 144], dtype=torch.float32, device=voxel_features.device)
+    spatial_features_2d = torch.ones([1, 384, 144, 144], dtype=torch.float32, device='cuda')
     torch.onnx.export(model.module_list[3], spatial_features_2d, "head.onnx", verbose=False,
                       input_names=["spatial_features_2d"], output_names=['cls', 'bbox', 'dir'])
     print('head.onnx transfer success ...')
@@ -155,22 +153,13 @@ def main():
     )
     logger.info(f'Total number of samples: \t{len(demo_dataset)}')
 
-    demo_dataloader = DataLoader(
-        demo_dataset, batch_size=1, shuffle=False, num_workers=1,
-        pin_memory=False, collate_fn=demo_dataset.collate_batch
-    )
-
     model = build_network(model_cfg=cfg.MODEL, num_class=len(cfg.CLASS_NAMES), dataset=demo_dataset)
     model.load_params_from_file(filename=args.ckpt, logger=logger, to_cpu=True)
     model.cuda()
     model.eval()
 
     dt_annos = []
-    for idx, data_dict in enumerate(demo_dataset):
-        logger.info(f'Visualized sample index: \t{idx + 1}')
-        data_dict = demo_dataset.collate_batch([data_dict])
-        load_data_to_gpu(data_dict)
-        dt_annos = export_onnx(model, data_dict)
+    dt_annos = export_onnx(model)
 
     logger.info('Export onnx done.')
 
