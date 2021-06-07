@@ -2,7 +2,7 @@ import numpy as np
 import torch
 import torch.nn as nn
 
-# rpn_id = -1
+rpn_id = -1
 class BaseBEVBackbone(nn.Module):
     def __init__(self, model_cfg, input_channels):
         super().__init__()
@@ -85,16 +85,33 @@ class BaseBEVBackbone(nn.Module):
                 spatial_features
         Returns:
         """
-        # global rpn_id
-        # rpn_id += 1
+        global rpn_id
+        rpn_id += 1
         spatial_features = data_dict['spatial_features']
         ups = []
         ret_dict = {}
         x = spatial_features
-        # print("x.shape", x.shape)
-        # np.save("/nfs/neolix_data1/temp_shl/rpn_npys/rpn_input_%04d" % rpn_id, x.detach().cpu().numpy())
-        # txt_content = list(x.detach().cpu().numpy())
-        # print(txt_content)
+
+        print("we are generating rpn out, if you don't aim to do so, pls take care if you are using the correct base_bev_backbone.py!!!")
+        # ===================================================== #
+        
+        bin_array_to_save = x.detach().cpu().numpy()
+        print(bin_array_to_save.shape)
+        print(bin_array_to_save.dtype)
+        bin_array_to_save_1d = bin_array_to_save.flatten()
+        rpn_input_data_path = "/nfs/neolix_data1/neolix_dataset/develop_dataset/lidar_object_detection/ID_1022/rpn_input_bin_for_calib/"
+        import os
+        
+        if os.path.isdir(rpn_input_data_path[0:-1]) == False:
+            print("we didn't find a dir called " + rpn_input_data_path + ", now we gonna create it.")
+            os.mkdir(rpn_input_data_path)
+        else:
+            print("we find a dir called " + rpn_input_data_path + ", now we gonna generate rpn input data to it.")
+
+        bin_array_to_save_1d.tofile(rpn_input_data_path + str(rpn_id) +'.bin')
+        
+        # ====================== for calib ==================== #
+
         for i in range(len(self.blocks)):
             x = self.blocks[i](x)
 

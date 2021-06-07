@@ -1,0 +1,91 @@
+DATASET: 'NeolixDataset'
+#DATA_PATH: '/nfs/neolix_data1/neolix_dataset/develop_dataset/lidar_object_detection/ID_1022/'
+DATA_PATH: '/nfs/neolix_data1/neolix_dataset/develop_dataset/lidar_object_detection/ID_1022/'
+CLASS_NAMES: ['Vehicle', 'Pedestrian', 'Cyclist', 'Unknown', 'Large_vehicle']
+TYPE_TO_ID: {'Vehicle': 1, 'Pedestrian': 2, 'Cyclist': 3, 'Unknown': 4, 'Large_vehicle': 5}
+
+EVAL:
+    OVERLAP_0_7: [[0.7, 0.5, 0.5, 0.5, 0.7, 0.7],
+                  [0.7, 0.5, 0.5, 0.5, 0.7, 0.7],
+                  [0.7, 0.5, 0.5, 0.5, 0.7, 0.7]]
+    OVERLAP_0_5: [[0.7, 0.5,  0.5,  0.5,  0.7, 0.5],
+                  [0.5, 0.25, 0.25, 0.25, 0.5, 0.5],
+                  [0.5, 0.25, 0.25, 0.25, 0.5, 0.5]]
+    CLASS_TO_NAME: {
+      '0': 'Vehicle',
+      '1': 'Pedestrian',
+      '2': 'Cyclist',
+      '3': 'Unknown',
+      '4': 'Large_vehicle'
+    }
+
+################  The above parameters need to be modified
+
+POINT_CLOUD_RANGE: [-69.12, -69.12, -1.5, 69.12, 69.12, 2.5] #[-20.48, -71.68, -1.5, 20.48, 71.68, 2.5]
+
+DATA_SPLIT: {
+    'train': train,
+    'test': val
+}
+
+INFO_PATH: {
+    'train': [neolix_infos_train.pkl],
+    'test': [neolix_infos_val.pkl],
+}
+
+FOV_POINTS_ONLY: False
+
+
+DATA_AUGMENTOR:
+    DISABLE_AUG_LIST: ['placeholder']
+    AUG_CONFIG_LIST:
+        - NAME: gt_sampling
+          USE_ROAD_PLANE: False
+          DB_INFO_PATH:
+              - neolix_dbinfos_train.pkl
+          PREPARE: {
+             filter_by_min_points: ['Vehicle:5', 'Pedestrian:5', 'Cyclist:5', 'Unknown:5'], #['Vehicle:5', 'Pedestrian:5', 'Cyclist:5', 'Unknown:5', 'Large_vehicle:10'],
+             filter_by_difficulty: [-1],
+          }
+
+          SAMPLE_GROUPS: ['Vehicle:1', 'Large_vehicle:13', 'Pedestrian:10', 'Cyclist:11', 'Bicycle:6', 'Unknown_movable:13', 'Unknown_unmovable:10'] #['Vehicle:20','Pedestrian:15','Cyclist:15','Unknown:10', 'Large_vehicle:20']
+#          SAMPLE_GROUPS: ['Vehicle:10','Pedestrian:10', 'Cyclist:15', 'Unknown:5'] #['Vehicle:20','Pedestrian:15','Cyclist:15','Unknown:10', 'Large_vehicle:20']
+          NUM_POINT_FEATURES: 4
+          DATABASE_WITH_FAKELIDAR: False
+          REMOVE_EXTRA_WIDTH: [0.0, 0.0, 0.0]
+          LIMIT_WHOLE_SCENE: True
+
+        - NAME: random_world_flip
+          ALONG_AXIS_LIST: ['y']
+
+        - NAME: random_world_rotation
+          WORLD_ROT_ANGLE: [-0.78539816, 0.78539816]
+
+        - NAME: random_world_scaling
+          WORLD_SCALE_RANGE: [0.95, 1.05]
+
+
+POINT_FEATURE_ENCODING: {
+    encoding_type: absolute_coordinates_encoding,
+    used_feature_list: ['x', 'y', 'z', 'intensity'],
+    src_feature_list: ['x', 'y', 'z', 'intensity'],
+}
+
+
+DATA_PROCESSOR:
+    - NAME: mask_points_and_boxes_outside_range
+      REMOVE_OUTSIDE_BOXES: True
+
+    - NAME: shuffle_points
+      SHUFFLE_ENABLED: {
+        'train': True,
+        'test': False
+      }
+
+    - NAME: transform_points_to_voxels
+      VOXEL_SIZE: [0.05, 0.05, 0.1]
+      MAX_POINTS_PER_VOXEL: 5
+      MAX_NUMBER_OF_VOXELS: {
+        'train': 16000,
+        'test': 40000
+      }

@@ -1,4 +1,4 @@
-from .base_bev_backbone import BaseBEVBackbone
+from .base_bev_backbone_for_calib import BaseBEVBackbone
 
 __all__ = {
     'BaseBEVBackbone': BaseBEVBackbone
