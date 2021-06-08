@@ -1,0 +1,14 @@
+{
+  "original_all_pc_dir": "/nfs/neolix_data1/neolix_dataset/develop_dataset/lidar_object_detection/ID_1022/training/velodyne",
+  "copied_calib_pc_dir": "/home/songhongli/1274_pcdet/calib_dataset/original_bin/",
+  "rpn_input_data_path": "/nfs/neolix_data1/neolix_dataset/develop_dataset/lidar_object_detection/ID_1022/rpn_input_bin_for_calib/",
+  "val_txt_file": "/nfs/neolix_data1/neolix_dataset/develop_dataset/lidar_object_detection/ID_1022/ImageSets/val.txt",
+  "eval_data_dir": "/nfs/neolix_data1/neolix_dataset/develop_dataset/lidar_object_detection/ID_1022/training/label_2",
+  "generated_calib_list_file": "/home/songhongli/1274_pcdet/calib_dataset/calib_set_list_rpn.txt",
+  "calib_rpn_input_dir": "/nfs/neolix_data1/neolix_dataset/develop_dataset/lidar_object_detection/ID_1022/rpn_input_bin_for_calib/",
+  "rpn_tarfile_name": "/home/songhongli/1274_pcdet/calib_dataset/tar_file_to_xavier/calib_dataset_and_list.tar.gz",
+  "eval_result_txt_dir": "/home/songhongli/huxi/1022_80epoch/out_txt",
+  "vfe_onnx_file": "/nfs/nas/model_release/pcdet_pointpillars/onnx_ID1022/vfe_1022.onnx",
+  "vfe_exported_weight_file":"/home/songhongli/1274_pcdet/vfe_weight_dir/vfe_1022_80_onnx.weight",
+  "eval_or_calib": "calib"
+}

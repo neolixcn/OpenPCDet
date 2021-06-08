@@ -1,5 +1,8 @@
 import numpy
 import glob
+# added by huxi, load rpn config
+from pcdet.pointpillar_quantize_config import load_rpn_config_json
+# ==============================
 
 
 
@@ -24,9 +27,14 @@ def generate_targz(calib_rpn_in_dir, tarfile_name):
 
 if __name__ == '__main__':
 
-    calib_rpn_in_dir = "/nfs/neolix_data1/neolix_dataset/develop_dataset/lidar_object_detection/ID_1022/rpn_input_bin_for_calib/"
+    config_dict = load_rpn_config_json.get_config()
+    calib_rpn_in_dir = config_dict["calib_rpn_input_dir"]
+
+    #calib_rpn_in_dir = "/nfs/neolix_data1/neolix_dataset/develop_dataset/lidar_object_detection/ID_1022/rpn_input_bin_for_calib/"
     list_all_bin(calib_rpn_in_dir)
     print("we have all data for calib now, let's start to generate tar file for xavier!")
-    tarfile_name = "/home/songhongli/1274_pcdet/calib_dataset/tar_file_to_xavier/calib_dataset_and_list.tar.gz"
+    tarfile_name = config_dict["rpn_tarfile_name"]
+    #tarfile_name = "/home/songhongli/1274_pcdet/calib_dataset/tar_file_to_xavier/calib_dataset_and_list.tar.gz"
+    
     generate_targz(calib_rpn_in_dir, tarfile_name)
 

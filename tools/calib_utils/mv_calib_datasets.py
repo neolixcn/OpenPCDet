@@ -1,6 +1,10 @@
 import os
 import shutil
 
+# added by huxi, load rpn config
+from pcdet.pointpillar_quantize_config import load_rpn_config_json
+# ==============================
+
 def move_data_to_dir(file_name, src_path, des_path):
     f_src = os.path.join(src_path, file_name)
     if not os.path.exists(des_path):
@@ -16,14 +20,19 @@ def read_calib_set_list(file_name, src_data_path, des_data_path):
 
 if __name__ == '__main__':
 
-    file_name = '/home/songhongli/1274_pcdet/calib_dataset/calib_set_list_rpn.txt'
+    #file_name = '/home/songhongli/1274_pcdet/calib_dataset/calib_set_list_rpn.txt'
+    config_dict = load_rpn_config_json.get_config()
+    file_name = config_dict["generated_calib_list_file"]
+
     import os
     if os.path.isfile(file_name) == False:
         print("we didn't find " + file_name + ", pls check!")
     else:
         
-        data_path = '/nfs/neolix_data1/neolix_dataset/develop_dataset/lidar_object_detection/ID_1022/training/velodyne'
-        des_data_path = '/home/songhongli/1274_pcdet/calib_dataset/original_bin/'
+        #data_path = '/nfs/neolix_data1/neolix_dataset/develop_dataset/lidar_object_detection/ID_1022/training/velodyne'
+        data_path = config_dict["original_all_pc_dir"]
+        #des_data_path = '/home/songhongli/1274_pcdet/calib_dataset/original_bin/'
+        des_data_path = config_dict["copied_calib_pc_dir"]
         if os.path.isdir(des_data_path[0:-1]) == False:
             print("we didn't find a dir called " + des_data_path + ", now we gonna create it.")
             os.mkdir(des_data_path)

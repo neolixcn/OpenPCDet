@@ -10,6 +10,9 @@ from pcdet.utils import common_utils
 
 # ============ added by huxi =============
 import eval_utils.cpp_result_load_utils as cpp_result_load
+
+# added by huxi, load rpn config
+from pcdet.pointpillar_quantize_config import load_rpn_config_json
 # ========================================
 
 def statistics_info(cfg, ret_dict, metric, disp_dict):
@@ -72,7 +75,10 @@ def eval_one_epoch(cfg, model, dataloader, epoch_id, logger, dist_test=False, sa
         # I (huxi) replaced the result predicted by network with txt result returned by cpp code,
         # so we can use the same metrics to evaluate the result.
         
-        data_dir = "/home/songhongli/huxi/1022_80epoch/out_txt"
+        config_dict = load_rpn_config_json.get_config()
+
+        data_dir = config_dict["eval_result_txt_dir"]
+        #data_dir = "/home/songhongli/huxi/1022_80epoch/out_txt"
         print(str(batch_dict["frame_id"][0]))
 
         batch_dict_, pred_dicts_, class_names_, output_path_ = cpp_result_load.load_txt_data(str(batch_dict["frame_id"][0]), data_dir)
