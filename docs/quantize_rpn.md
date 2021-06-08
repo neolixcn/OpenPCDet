@@ -11,7 +11,6 @@
 ├── OpenPCDet
 ├── calib_dataset
     ├── original_bin
-├── infer_out_useless
 ├── vfe_weight_dir
 ```
 
