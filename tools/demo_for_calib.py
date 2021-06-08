@@ -150,7 +150,9 @@ class DemoDataset(DatasetTemplate):
 
             if len(single_pred_dict['name']) == 0:
                 continue
-
+            # hard coded by huxi
+            output_path = None
+            # ==================
             if output_path is not None:
                 label_path = output_path
                 track_format = False
@@ -236,7 +238,7 @@ def main():
                 pred_dicts, ret_dict = model(data_dict)
             annos = demo_dataset.generate_prediction_dicts(
                 data_dict, pred_dicts, cfg.CLASS_NAMES,
-                output_path=Path(args.output_path)
+                output_path=None
             )
             # V.draw_scenes(
             #     points=data_dict['points'][:, 1:], gt_boxes=data_dict['gt_boxes'][0][:, :-1], ref_boxes=pred_dicts[0]['pred_boxes'],

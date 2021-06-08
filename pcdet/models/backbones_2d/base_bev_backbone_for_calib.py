@@ -2,6 +2,10 @@ import numpy as np
 import torch
 import torch.nn as nn
 
+# added by huxi, load rpn config
+from pcdet.pointpillar_quantize_config import load_rpn_config_json
+# ==============================
+
 rpn_id = -1
 class BaseBEVBackbone(nn.Module):
     def __init__(self, model_cfg, input_channels):
@@ -92,25 +96,32 @@ class BaseBEVBackbone(nn.Module):
         ret_dict = {}
         x = spatial_features
 
-        print("we are generating rpn out, if you don't aim to do so, pls take care if you are using the correct base_bev_backbone.py!!!")
-        # ===================================================== #
         
-        bin_array_to_save = x.detach().cpu().numpy()
-        print(bin_array_to_save.shape)
-        print(bin_array_to_save.dtype)
-        bin_array_to_save_1d = bin_array_to_save.flatten()
-        rpn_input_data_path = "/nfs/neolix_data1/neolix_dataset/develop_dataset/lidar_object_detection/ID_1022/rpn_input_bin_for_calib/"
-        import os
-        
-        if os.path.isdir(rpn_input_data_path[0:-1]) == False:
-            print("we didn't find a dir called " + rpn_input_data_path + ", now we gonna create it.")
-            os.mkdir(rpn_input_data_path)
-        else:
-            print("we find a dir called " + rpn_input_data_path + ", now we gonna generate rpn input data to it.")
+        config_dict = load_rpn_config_json.get_config()
 
-        bin_array_to_save_1d.tofile(rpn_input_data_path + str(rpn_id) +'.bin')
-        
-        # ====================== for calib ==================== #
+        if(config_dict["eval_or_calib"] == "calib"):
+            # ===================================================== #
+            print("we are generating rpn out, if you don't aim to do so, pls take care if you are using the correct base_bev_backbone.py!!!")
+            
+            bin_array_to_save = x.detach().cpu().numpy()
+            print(bin_array_to_save.shape)
+            print(bin_array_to_save.dtype)
+            bin_array_to_save_1d = bin_array_to_save.flatten()
+            rpn_input_data_path = config_dict["calib_rpn_input_dir"]
+            #rpn_input_data_path = "/nfs/neolix_data1/neolix_dataset/develop_dataset/lidar_object_detection/ID_1022/rpn_input_bin_for_calib/"
+            import os
+            
+            if os.path.isdir(rpn_input_data_path[0:-1]) == False:
+                print("we didn't find a dir called " + rpn_input_data_path + ", now we gonna create it.")
+                os.mkdir(rpn_input_data_path)
+            else:
+                print("we find a dir called " + rpn_input_data_path + ", now we gonna generate rpn input data to it.")
+
+            bin_array_to_save_1d.tofile(rpn_input_data_path + str(rpn_id) +'.bin')
+            
+            # ====================== for calib ==================== #
+        else:
+            print("we are not generating rpn input, because you set 'eval_or_calib' as 'eval'!")
 
         for i in range(len(self.blocks)):
             x = self.blocks[i](x)
