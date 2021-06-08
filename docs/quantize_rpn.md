@@ -6,12 +6,14 @@
 ### step0. 创建工作目录结构（optional，在8851上不需要做）
 目前8851上的目录结构如下：
 
+```
 1274_pcdet (此即是后面的 your/work/space，是自己创建的)
 ├── OpenPCDet
 ├── calib_dataset
     ├── original_bin
 ├── infer_out_useless
 ├── vfe_weight_dir
+```
 
 如果是在一个新目录下生成各类数据，也需要创建成一样的形式，通过如下命令：
 ```shell script
@@ -28,6 +30,7 @@ python setup.py develop #配置各种环境
 ### step1. 准备配置文件
 ```shell script
 #检查配置文件
+cd your/work/space
 code OpenPCDet/blob/rpn-quantize/pcdet/pointpillar_quantize_config/rpn_quantize_config.json
 ```
 如果是8851服务器上量化1022模型，用默认的配置文件即可，更换服务器或是量化新的rpn网络，则需要修改配置文件
