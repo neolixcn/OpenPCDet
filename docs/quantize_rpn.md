@@ -23,6 +23,7 @@ mkdir vfe_weight_dir
 mkdir calib_dataset
 mkdir calib_datset/original_bin
 cd OpenPCDet
+source activate torch1.3.1
 python setup.py develop #配置各种环境
 ```
 
@@ -38,47 +39,48 @@ code OpenPCDet/blob/rpn-quantize/pcdet/pointpillar_quantize_config/rpn_quantize_
 ```shell script
 {
   "original_all_pc_dir": 
-  说明：所有原始点云的位置
+  说明：所有原始点云的位置。如果数据集没有改变不需要修改。
   eg. "/nfs/neolix_data1/neolix_dataset/develop_dataset/lidar_object_detection/ID_1022/training/velodyne",
   
   "copied_calib_pc_dir": 
-  说明：我们选择出来的均衡点云数据，需要放置的位置，在我们的calib_dataset下
+  说明：我们选择出来的均衡点云数据，需要放置的位置，在我们的calib_dataset下。需要把 "1274_pcdet" 替换为你自己的目录。
   eg. "/home/songhongli/1274_pcdet/calib_dataset/original_bin/",
   
   "val_txt_file": 
-  说明：原始点云数据的验证集 txt 文件
+  说明：原始点云数据的验证集 txt 文件。如果数据集没有改变不需要修改。
   eg. "/nfs/neolix_data1/neolix_dataset/develop_dataset/lidar_object_detection/ID_1022/ImageSets/val.txt",
   
   "eval_data_dir": 
-  说明：原始点云数据的 label 目录
+  说明：原始点云数据的 label 目录。如果数据集没有改变不需要修改。
   eg. "/nfs/neolix_data1/neolix_dataset/develop_dataset/lidar_object_detection/ID_1022/training/label_2",
   
   
   "generated_calib_list_file": 
-  说明：生成的校准集的list文件，需要放到calib_dataset下
+  说明：生成的校准集的list文件，需要放到calib_dataset下。需要把 "1274_pcdet" 替换为你自己的目录。
   eg. "/home/songhongli/1274_pcdet/calib_dataset/calib_set_list_rpn.txt",
   
   
   "calib_rpn_input_dir": 
-  说明：需要生成的 rpn input data 的放置位置，因为生成的文件较大，建议放在nas服务器上
+  说明：需要生成的 rpn input data 的放置位置，因为生成的文件较大，建议放在nas服务器上。如果数据集没有改变不需要修改。
   eg. "/nfs/neolix_data1/neolix_dataset/develop_dataset/lidar_object_detection/ID_1022/rpn_input_bin_for_calib/",
   
   
   "rpn_tarfile_name": 
-  说明：最后打包的所有 rpn input 还有一个 data_list 文件的包名，这个也就是需要传输到 xavier 上生成量化模型的数据
+  说明：最后打包的所有 rpn input 还有一个 data_list 文件的包名，这个也就是需要传输到 xavier 上生成量化模型的数据。
+        需要把 "1274_pcdet" 替换为你自己的目录。
   eg. "/home/songhongli/1274_pcdet/calib_dataset/tar_file_to_xavier/calib_dataset_and_list.tar.gz",
   
   
   "eval_result_txt_dir": 
-  说明：用来验证结果的数据文件夹，从 cpp 端的 pointpillar 的工具可以生成结果，放置到该路径下可以验证结果，
+  说明：用来验证结果的数据文件夹，从 cpp 端的 pointpillar 的工具可以生成结果，放置到该路径下可以验证结果。可以放到你创建的任意路径下。
   eg. "/home/songhongli/huxi/1022_80epoch/out_txt",
   
   "vfe_onnx_file": 
-  说明：vfe 网络的 onnx 路径
+  说明：vfe 网络的 onnx 路径。如果模型没有改变不需要修改。
   eg. "/nfs/nas/model_release/pcdet_pointpillars/onnx_ID1022/vfe_1022.onnx",
   
   "vfe_exported_weight_file":
-  说明：需要生成的 vfe weight 文件名，之后需要传输到 xavier 上构建 vfe 网络
+  说明：需要生成的 vfe weight 文件名，之后需要传输到 xavier 上构建 vfe 网络。需要把 "1274_pcdet" 替换为你自己的目录。
   eg. "/home/songhongli/1274_pcdet/vfe_weight_dir/vfe_1022_80_onnx.weight",
   
   "eval_or_calib": 
@@ -86,11 +88,11 @@ code OpenPCDet/blob/rpn-quantize/pcdet/pointpillar_quantize_config/rpn_quantize_
   eg. "calib"
   
   "dataset_yaml_file": 
-  说明：当前测试指标或者生成量化数据的 yaml 文件名，在 tools/cfgs/neolix_models/ 下
+  说明：当前测试指标或者生成量化数据的 yaml 文件名，在 tools/cfgs/neolix_models/ 下。如果数据集没有改变不需要修改。
   eg. "pointpillar_1022_for_calib.yaml",
   
   "checkpoint_pth":
-  说明：当前测试指标或者生成量化数据的 checkpoint 文件名
+  说明：当前测试指标或者生成量化数据的 checkpoint 文件名。如果模型没有改变不需要修改
   eg. "/home/songhongli/1274_pcdet/checkpoint_pth/checkpoint_epoch_80_1022.pth"
   
 }
