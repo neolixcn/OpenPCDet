@@ -106,5 +106,7 @@ cd OpenPCDet/tools/script
 chmod 777 rpn_quantize.sh
 ./rpn_quantize.sh
 ```
+运行该脚本在进行数据压缩时会消耗比较长时间（大约5分钟左右），在脚本运行完成后，会提示 "done!"。
 
 注意：如果选择评测指标，则需要把cpp端生成的数据放到 "eval_result_txt_dir" 路径下。
+
