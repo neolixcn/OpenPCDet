@@ -18,7 +18,7 @@
 ```shell script
 cd your/work/space
 git clone https://github.com/neolixcn/OpenPCDet.git
-mkdir infer_out_useless
+git checkout rpn-quantize
 mkdir vfe_weight_dir
 mkdir calib_dataset
 mkdir calib_datset/original_bin
@@ -84,6 +84,15 @@ code OpenPCDet/blob/rpn-quantize/pcdet/pointpillar_quantize_config/rpn_quantize_
   "eval_or_calib": 
   说明：表明当前任务是评测指标还是生成量化数据，可选 "eval" 和 "calib"，
   eg. "calib"
+  
+  "dataset_yaml_file": 
+  说明：当前测试指标或者生成量化数据的 yaml 文件名，在 tools/cfgs/neolix_models/ 下
+  eg. "pointpillar_1022_for_calib.yaml",
+  
+  "checkpoint_pth":
+  说明：当前测试指标或者生成量化数据的 checkpoint 文件名
+  eg. "/home/songhongli/1274_pcdet/checkpoint_pth/checkpoint_epoch_80_1022.pth"
+  
 }
 ```
 
