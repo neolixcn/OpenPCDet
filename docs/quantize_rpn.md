@@ -25,6 +25,7 @@ mkdir calib_datset/original_bin
 cd OpenPCDet
 source activate torch1.3.1
 python setup.py develop #配置各种环境
+conda deactivate
 ```
 
 ### step1. 准备配置文件
