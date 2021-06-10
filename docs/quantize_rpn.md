@@ -11,6 +11,7 @@
 ├── OpenPCDet
 ├── calib_dataset
     ├── original_bin
+    ├── tar_file_to_xavier
 ├── vfe_weight_dir
 ```
 
@@ -22,6 +23,7 @@ git checkout rpn-quantize
 mkdir vfe_weight_dir
 mkdir calib_dataset
 mkdir calib_datset/original_bin
+mkdir calib_datset/tar_file_to_xavier
 cd OpenPCDet
 source activate torch1.3.1
 python setup.py develop #配置各种环境
