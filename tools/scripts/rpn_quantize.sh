@@ -32,7 +32,7 @@ else
   calib_rpn_input_dir=`cat $parentdir/pcdet/pointpillar_quantize_config/rpn_quantize_config.json | \
       python -c 'import json,sys;obj=json.load(sys.stdin);print(obj["calib_rpn_input_dir"])'`;
   echo $calib_rpn_input_dir
-  rm $calib_rpn_input_dir/*.*
+  rm -rf $calib_rpn_input_dir/*.*
   # --------^ 清理掉之前的文件 ^--------
 
   python demo_for_calib.py --cfg_file cfgs/neolix_models/pointpillar_1022_for_calib.yaml --ckpt /home/songhongli/1274_pcdet/checkpoint_pth/checkpoint_epoch_80_1022.pth --data_path $copied_calib_pc_dir --output_path /home/songhongli/1274_pcdet/infer_out_useless/
