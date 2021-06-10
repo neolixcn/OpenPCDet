@@ -32,7 +32,7 @@ conda deactivate
 ```shell script
 #检查配置文件
 cd your/work/space
-code OpenPCDet/blob/rpn-quantize/pcdet/pointpillar_quantize_config/rpn_quantize_config.json
+code OpenPCDet/pcdet/pointpillar_quantize_config/rpn_quantize_config.json
 ```
 如果是8851服务器上量化1022模型，用默认的配置文件即可，更换服务器或是量化新的rpn网络，则需要修改配置文件
 按照参数说明填写配置文件，说明如下：
