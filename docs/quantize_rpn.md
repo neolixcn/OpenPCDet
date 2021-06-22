@@ -41,6 +41,10 @@ code OpenPCDet/pcdet/pointpillar_quantize_config/rpn_quantize_config.json
 
 ```shell script
 {
+  "quantize_mode":
+  说明：表面当前是否进行量化操作，可选 "true" 和 "false"（注意这里是字符串而不是bool值），训练时需要设置为 "false"，当这一项为 "false" 时，rpn_quantize.sh 将终止运行并输出提示信息。
+  eg."false"
+
   "original_all_pc_dir": 
   说明：所有原始点云的位置。如果数据集没有改变不需要修改。
   eg. "/nfs/neolix_data1/neolix_dataset/develop_dataset/lidar_object_detection/ID_1022/training/velodyne",

@@ -20,7 +20,8 @@ def to_numpy(tensor):
 
 
 
-[tensor_mat_weight] = [t for t in onnx_model.graph.initializer if t.name == "linear.weight"]
+#[tensor_mat_weight] = [t for t in onnx_model.graph.initializer if t.name == "linear.weight"]
+[tensor_mat_weight] = [t for t in onnx_model.graph.initializer if t.name == "14"]
 
 [tensor_bn_gamma] = [t for t in onnx_model.graph.initializer if t.name == "norm.weight"]
 [tensor_bn_beta] = [t for t in onnx_model.graph.initializer if t.name == "norm.bias"]
@@ -30,6 +31,7 @@ def to_numpy(tensor):
 
 
 mat_w = onnx.numpy_helper.to_array(tensor_mat_weight)
+mat_w = mat_w.transpose()
 mat_w_list = list(mat_w.flatten())
 
 bn_gamma_w = onnx.numpy_helper.to_array(tensor_bn_gamma)
