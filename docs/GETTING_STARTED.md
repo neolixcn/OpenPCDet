@@ -146,7 +146,7 @@ The length of 'CLASS_NAMES', 'filter_by_min_points', 'SAMPLE_GROUPS','ANCHOR_GEN
 
 ## Training & Testing
 
-Please make sure you have set "quantize_mode" as "false" in config file [rpn_quantize_config.json](https://github.com/neolixcn/OpenPCDet/tree/master/pcdet/pointpillar_quantize_config/rpn_quantize_config.json) the when you are training models or doing inference. 
+Please make sure you have set "quantize_mode" as "false" in config file [rpn_quantize_config.json](../pcdet/pointpillar_quantize_config/rpn_quantize_config.json) the when you are training models or doing inference. 
 
 ### Test and evaluate the pretrained models
 * Test with a pretrained model: 
@@ -213,4 +213,4 @@ python demo.py --cfg_file ${CONFIG_FILE} --ckpt ${ckpt_FILE} --data_path ${DATA_
 
 ## Quantization
 Current quantization tools only supports exported onnx model on torch 1.6.0. 
-For quantization of rpn network, please refering to document [quantize_rpn.md](https://github.com/neolixcn/OpenPCDet/tree/master/docs/quantize_rpn.md).  
+For quantization of rpn network, please refering to document [quantize_rpn.md](quantize_rpn.md).  
