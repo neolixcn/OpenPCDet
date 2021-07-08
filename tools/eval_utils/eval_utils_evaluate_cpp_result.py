@@ -8,6 +8,12 @@ import tqdm
 from pcdet.models import load_data_to_gpu
 from pcdet.utils import common_utils
 
+# ============ added by huxi =============
+import eval_utils.cpp_result_load_utils as cpp_result_load
+
+# added by huxi, load rpn config
+from pcdet.pointpillar_quantize_config import load_rpn_config_json
+# ========================================
 
 def statistics_info(cfg, ret_dict, metric, disp_dict):
     for cur_thresh in cfg.MODEL.POST_PROCESSING.RECALL_THRESH_LIST:
@@ -57,12 +63,33 @@ def eval_one_epoch(cfg, model, dataloader, epoch_id, logger, dist_test=False, sa
             pred_dicts, ret_dict = model(batch_dict)
         disp_dict = {}
 
+        '''
         statistics_info(cfg, ret_dict, metric, disp_dict)
         annos = dataset.generate_prediction_dicts(
             batch_dict, pred_dicts, class_names,
             output_path=final_output_dir if save_to_file else None
         )
-        det_annos += annos
+        '''
+
+        # === added by huxi ===
+        # I (huxi) replaced the result predicted by network with txt result returned by cpp code,
+        # so we can use the same metrics to evaluate the result.
+        
+        config_dict = load_rpn_config_json.get_config()
+
+        data_dir = config_dict["eval_result_txt_dir"]
+        #data_dir = "/home/songhongli/huxi/1022_80epoch/out_txt"
+        print(str(batch_dict["frame_id"][0]))
+
+        batch_dict_, pred_dicts_, class_names_, output_path_ = cpp_result_load.load_txt_data(str(batch_dict["frame_id"][0]), data_dir)
+        annos_ = dataset.generate_prediction_dicts(
+                batch_dict, pred_dicts_, class_names,
+                output_path=final_output_dir if save_to_file else None
+        )
+
+        det_annos += annos_
+        # =====================
+
         if cfg.LOCAL_RANK == 0:
             progress_bar.set_postfix(disp_dict)
             progress_bar.update()

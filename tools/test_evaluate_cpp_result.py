@@ -10,7 +10,10 @@ import numpy as np
 import torch
 from tensorboardX import SummaryWriter
 
-from eval_utils import eval_utils
+#from eval_utils import eval_utils
+from eval_utils import eval_utils_evaluate_cpp_result
+# modified by huxi
+
 from pcdet.config import cfg, cfg_from_list, cfg_from_yaml_file, log_config_to_file
 from pcdet.datasets import build_dataloader
 from pcdet.models import build_network
@@ -55,8 +58,9 @@ def eval_single_ckpt(model, test_loader, args, eval_output_dir, logger, epoch_id
     # load checkpoint
     model.load_params_from_file(filename=args.ckpt, logger=logger, to_cpu=dist_test)
     model.cuda()
+
     # start evaluation
-    eval_utils.eval_one_epoch(
+    eval_utils_evaluate_cpp_result.eval_one_epoch(
         cfg, model, test_loader, epoch_id, logger, dist_test=dist_test,
         result_dir=eval_output_dir, save_to_file=args.save_to_file
     )
@@ -114,7 +118,7 @@ def repeat_eval_ckpt(model, test_loader, args, eval_output_dir, logger, ckpt_dir
 
         # start evaluation
         cur_result_dir = eval_output_dir / ('epoch_%s' % cur_epoch_id) / cfg.DATA_CONFIG.DATA_SPLIT['test']
-        tb_dict = eval_utils.eval_one_epoch(
+        tb_dict = eval_utils_evaluate_cpp_result.eval_one_epoch(
             cfg, model, test_loader, cur_epoch_id, logger, dist_test=dist_test,
             result_dir=cur_result_dir, save_to_file=args.save_to_file
         )
@@ -184,11 +188,6 @@ def main():
         batch_size=args.batch_size,
         dist=dist_test, workers=args.workers, logger=logger, training=False
     )
-    # -----------------------start testing---------------------------
-    # logger.info('**********************Start testing %s/%s(%s)**********************'
-    #             % (cfg.EXP_GROUP_PATH, cfg.TAG, args.extra_tag))
-    # test_loader.dataset.__generateitem__()
-    # return 0
 
     model = build_network(model_cfg=cfg.MODEL, num_class=len(cfg.CLASS_NAMES), dataset=test_set)
     with torch.no_grad():
